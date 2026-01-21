@@ -1,0 +1,576 @@
+{
+    "initial_values": {
+        "name": "",
+        "ip": "",
+        "mac": "",
+        "device_sn": "",
+        "description": "",
+        "network_segment": "",
+        "belong_room": "",
+        "belong_rack": "",
+        "cloud_platform_detail": "",
+        "cpu_model": "",
+        "cpu_cores": "",
+        "memory_model": "",
+        "memory_size": "",
+        "disk_model": "",
+        "disk_size": "",
+        "gpu_spec": "",
+        "os_type": "",
+        "vendor": "",
+        "is_domestic": false,
+        "owner_phone": "",
+        "owner_email": "",
+        "owner_id": "",
+        "org_id": "",
+        "org_name": ""
+    },
+    "datasources": {
+        "cloud-host-primary-system:v1": {
+            "id": "cloud-host-primary-system:v1",
+            "type": "paged_api",
+            "method": "GET",
+            "url": "/business",
+            "paging": {
+                "mode": "offset",
+                "limit": 20
+            },
+            "fixed_params": {
+                "level": 0
+            },
+            "result": {
+                "label_path": "business_name",
+                "value_path": "business_name"
+            },
+            "scope_key": ""
+        },
+        "cloud-host-secondary-system:v1": {
+            "id": "cloud-host-secondary-system:v1",
+            "type": "paged_api",
+            "method": "GET",
+            "url": "/business",
+            "paging": {
+                "mode": "offset",
+                "limit": 20
+            },
+            "depends_on": [
+                "primary_system"
+            ],
+            "params_map": {
+                "primary_system": "parent_id"
+            },
+            "result": {
+                "label_path": "business_name",
+                "value_path": "business_name"
+            },
+            "scope_key": ""
+        },
+        "cloud-host-related-business-asset:v1": {
+            "id": "cloud-host-related-business-asset:v1",
+            "type": "paged_api",
+            "method": "GET",
+            "url": "/business",
+            "paging": {
+                "mode": "offset",
+                "limit": 20
+            },
+            "fixed_params": {
+                "category": "SERVICE"
+            },
+            "result": {
+                "label_path": "business_name",
+                "value_path": "business_name"
+            },
+            "scope_key": ""
+        },
+        "cloud-host-owner-entry:v1": {
+            "id": "cloud-host-owner-entry:v1",
+            "type": "paged_api",
+            "method": "GET",
+            "url": "/owner",
+            "paging": {
+                "mode": "offset",
+                "limit": 20
+            },
+            "fixed_params": {
+                "category": "terminal"
+            },
+            "result": {
+                "label_path": "name",
+                "value_path": "name"
+            },
+            "scope_key": ""
+        }
+    },
+    "schema": {
+        "type": "object",
+        "properties": {
+            "tabs": {
+                "type": "void",
+                "x-component": "FormTab",
+                "x-component-props": {
+                    "formTab": "{{formTab}}"
+                },
+                "properties": {
+                    "basic": {
+                        "type": "void",
+                        "x-component": "FormTab.TabPane",
+                        "x-component-props": {
+                            "tab": "基础信息",
+                            "key": "basic"
+                        },
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "title": "主机名称",
+                                "required": true,
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "请输入",
+                                    "maxLength": 20,
+                                    "showCount": true
+                                },
+                                "x-validator": [
+                                    {
+                                        "required": true,
+                                        "message": "请输入主机名称"
+                                    },
+                                    {
+                                        "pattern": "^(?=\\s*\\S).+$",
+                                        "message": "请输入主机名称"
+                                    }
+                                ]
+                            },
+                            "ip": {
+                                "type": "string",
+                                "title": "IP 地址",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "例如：10.10.0.1",
+                                    "maxLength": 20,
+                                    "showCount": true
+                                },
+                                "x-validator": [
+                                    {
+                                        "pattern": "^$|(?:(?:25[0-5]|2[0-4]\\\\d|1\\\\d\\\\d|[1-9]?\\\\d)\\\\.){3}(?:25[0-5]|2[0-4]\\\\d|1\\\\d\\\\d|[1-9]?\\\\d)$",
+                                        "message": "IP 地址格式不正确"
+                                    }
+                                ]
+                            },
+                            "mac": {
+                                "type": "string",
+                                "title": "MAC 地址",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "例如：AA:BB:CC:DD:EE:FF",
+                                    "maxLength": 20,
+                                    "showCount": true
+                                },
+                                "x-validator": [
+                                    {
+                                        "pattern": "^$|^([0-9A-Fa-f]{2}([-:])){5}([0-9A-Fa-f]{2})$",
+                                        "message": "MAC 地址格式不正确"
+                                    }
+                                ]
+                            },
+                            "device_sn": {
+                                "type": "string",
+                                "title": "设备序列号",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "请输入",
+                                    "maxLength": 20,
+                                    "showCount": true
+                                }
+                            },
+                            "primary_system": {
+                                "type": "string",
+                                "title": "一级系统",
+                                "x-decorator": "FormItem",
+                                "x-component": "DynamicInfiniteScrollSelect",
+                                "x-component-props": {
+                                    "datasource_id": "cloud-host-primary-system:v1",
+                                    "allowClear": true,
+                                    "showSearch": true,
+                                    "placeholder": "请选择",
+                                    "optionFilterProp": "label",
+                                    "reset_fields_on_change": [
+                                        "secondary_system"
+                                    ]
+                                }
+                            },
+                            "secondary_system": {
+                                "type": "string",
+                                "title": "二级系统",
+                                "x-decorator": "FormItem",
+                                "x-component": "DynamicInfiniteScrollSelect",
+                                "x-component-props": {
+                                    "datasource_id": "cloud-host-secondary-system:v1",
+                                    "allowClear": true,
+                                    "showSearch": true,
+                                    "placeholder": "请选择",
+                                    "optionFilterProp": "label",
+                                    "require_deps": true,
+                                    "deps_missing_tip": "请先选择一级系统"
+                                }
+                            },
+                            "related_business_asset": {
+                                "type": "string",
+                                "title": "关联业务资产",
+                                "x-decorator": "FormItem",
+                                "x-component": "DynamicInfiniteScrollSelect",
+                                "x-component-props": {
+                                    "datasource_id": "cloud-host-related-business-asset:v1",
+                                    "allowClear": true,
+                                    "showSearch": true,
+                                    "placeholder": "请选择",
+                                    "optionFilterProp": "label"
+                                }
+                            },
+                            "description": {
+                                "type": "string",
+                                "title": "描述",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input.TextArea",
+                                "x-component-props": {
+                                    "placeholder": "最多输入 255 个字符",
+                                    "maxLength": 255,
+                                    "showCount": true
+                                }
+                            }
+                        }
+                    },
+                    "deployment": {
+                        "type": "void",
+                        "x-component": "FormTab.TabPane",
+                        "x-component-props": {
+                            "tab": "部署位置",
+                            "key": "deployment"
+                        },
+                        "properties": {
+                            "network_segment": {
+                                "type": "string",
+                                "title": "所属网段",
+                                "required": true,
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "请输入",
+                                    "maxLength": 20,
+                                    "showCount": true
+                                },
+                                "x-validator": [
+                                    {
+                                        "required": true,
+                                        "message": "请输入所属网段"
+                                    },
+                                    {
+                                        "pattern": "^(?=\\s*\\S).+$",
+                                        "message": "请输入所属网段"
+                                    }
+                                ]
+                            },
+                            "belong_room": {
+                                "type": "string",
+                                "title": "所属机房",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "请输入",
+                                    "maxLength": 20,
+                                    "showCount": true
+                                }
+                            },
+                            "belong_rack": {
+                                "type": "string",
+                                "title": "所属机柜",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "请输入",
+                                    "maxLength": 20,
+                                    "showCount": true
+                                }
+                            },
+                            "cloud_platform_detail": {
+                                "type": "string",
+                                "title": "云平台详情",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "例如：华为云 · 华东",
+                                    "maxLength": 20,
+                                    "showCount": true
+                                }
+                            }
+                        }
+                    },
+                    "spec": {
+                        "type": "void",
+                        "x-component": "FormTab.TabPane",
+                        "x-component-props": {
+                            "tab": "规格信息",
+                            "key": "spec"
+                        },
+                        "properties": {
+                            "cpu_model": {
+                                "type": "string",
+                                "title": "CPU 型号",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "请输入",
+                                    "maxLength": 20,
+                                    "showCount": true
+                                }
+                            },
+                            "cpu_cores": {
+                                "type": "string",
+                                "title": "CPU 核数",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "请输入",
+                                    "maxLength": 20,
+                                    "showCount": true,
+                                    "suffix": "核"
+                                },
+                                "x-validator": [
+                                    {
+                                        "pattern": "^$|^[1-9]\\d*$",
+                                        "message": "仅支持正整数"
+                                    }
+                                ]
+                            },
+                            "memory_model": {
+                                "type": "string",
+                                "title": "内存型号",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "请输入",
+                                    "maxLength": 20,
+                                    "showCount": true
+                                }
+                            },
+                            "memory_size": {
+                                "type": "string",
+                                "title": "内存大小",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "请输入",
+                                    "maxLength": 20,
+                                    "showCount": true,
+                                    "suffix": "G"
+                                },
+                                "x-validator": [
+                                    {
+                                        "pattern": "^$|^[1-9]\\d*$",
+                                        "message": "仅支持正整数"
+                                    }
+                                ]
+                            },
+                            "disk_model": {
+                                "type": "string",
+                                "title": "磁盘型号",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "请输入",
+                                    "maxLength": 20,
+                                    "showCount": true
+                                }
+                            },
+                            "disk_size": {
+                                "type": "string",
+                                "title": "磁盘大小",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "请输入",
+                                    "maxLength": 20,
+                                    "showCount": true,
+                                    "suffix": "G"
+                                },
+                                "x-validator": [
+                                    {
+                                        "pattern": "^$|^[1-9]\\d*$",
+                                        "message": "仅支持正整数"
+                                    }
+                                ]
+                            },
+                            "gpu_spec": {
+                                "type": "string",
+                                "title": "GPU 规格",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "请输入",
+                                    "maxLength": 20,
+                                    "showCount": true
+                                }
+                            },
+                            "os_type": {
+                                "type": "string",
+                                "title": "操作系统/版本",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "例如：Linux / Ubuntu 22.04",
+                                    "maxLength": 20,
+                                    "showCount": true
+                                }
+                            },
+                            "vendor": {
+                                "type": "string",
+                                "title": "厂商",
+                                "required": true,
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "请输入",
+                                    "maxLength": 20,
+                                    "showCount": true
+                                },
+                                "x-validator": [
+                                    {
+                                        "required": true,
+                                        "message": "请输入厂商"
+                                    },
+                                    {
+                                        "pattern": "^(?=\\s*\\S).+$",
+                                        "message": "请输入厂商"
+                                    }
+                                ]
+                            },
+                            "factory_date": {
+                                "type": "string",
+                                "title": "出厂时间",
+                                "x-decorator": "FormItem",
+                                "x-component": "DatePicker",
+                                "x-component-props": {
+                                    "placeholder": "请选择",
+                                    "style": {
+                                        "width": "100%"
+                                    }
+                                }
+                            },
+                            "is_domestic": {
+                                "type": "boolean",
+                                "title": "是否国产",
+                                "x-decorator": "FormItem",
+                                "x-component": "Switch",
+                                "x-component-props": {
+                                    "checkedChildren": "是",
+                                    "unCheckedChildren": "否"
+                                }
+                            }
+                        }
+                    },
+                    "owner": {
+                        "type": "void",
+                        "x-component": "FormTab.TabPane",
+                        "x-component-props": {
+                            "tab": "责任归属",
+                            "key": "owner"
+                        },
+                        "properties": {
+                            "owner_name": {
+                                "type": "string",
+                                "title": "责任人",
+                                "required": true,
+                                "x-decorator": "FormItem",
+                                "x-component": "DynamicInfiniteScrollSelect",
+                                "x-component-props": {
+                                    "datasource_id": "cloud-host-owner-entry:v1",
+                                    "allowClear": true,
+                                    "showSearch": true,
+                                    "placeholder": "请选择",
+                                    "optionFilterProp": "label",
+                                    "assign_to": {
+                                        "owner_id": "id",
+                                        "org_id": "org_id",
+                                        "org_name": "org_name"
+                                    }
+                                },
+                                "x-validator": [
+                                    {
+                                        "required": true,
+                                        "message": "请选择责任人"
+                                    }
+                                ]
+                            },
+                            "owner_id": {
+                                "type": "string",
+                                "x-visible": false,
+                                "x-decorator": "FormItem",
+                                "x-component": "Input"
+                            },
+                            "org_id": {
+                                "type": "string",
+                                "x-visible": false,
+                                "x-decorator": "FormItem",
+                                "x-component": "Input"
+                            },
+                            "org_name": {
+                                "type": "string",
+                                "x-visible": false,
+                                "x-decorator": "FormItem",
+                                "x-component": "Input"
+                            },
+                            "owner_phone": {
+                                "type": "string",
+                                "title": "手机号",
+                                "required": true,
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "例如：13800000000",
+                                    "maxLength": 20,
+                                    "showCount": true
+                                },
+                                "x-validator": [
+                                    {
+                                        "required": true,
+                                        "message": "请输入手机号"
+                                    },
+                                    {
+                                        "pattern": "^1\\d{10}$",
+                                        "message": "手机号格式不正确"
+                                    }
+                                ]
+                            },
+                            "owner_email": {
+                                "type": "string",
+                                "title": "邮箱",
+                                "required": true,
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                                "x-component-props": {
+                                    "placeholder": "例如：name@example.com",
+                                    "maxLength": 20,
+                                    "showCount": true
+                                },
+                                "x-validator": [
+                                    {
+                                        "required": true,
+                                        "message": "请输入邮箱"
+                                    },
+                                    {
+                                        "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+                                        "message": "邮箱格式不正确"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
