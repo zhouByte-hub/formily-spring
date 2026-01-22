@@ -1,4 +1,1 @@
-com\formily\FormilyBasicApplication.class
-com\formily\controller\SchemaController.class
-com\formily\model\Schema.class
-com\formily\service\SchemaService.class
+com/formily/controller/SchemaPreviewRenderer.class

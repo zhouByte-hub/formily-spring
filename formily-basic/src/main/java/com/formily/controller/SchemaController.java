@@ -1,5 +1,6 @@
 package com.formily.controller;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.formily.model.Schema;
 import com.formily.service.SchemaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,14 +9,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-    /**
-     * Schema控制器
+/**
+ * Schema控制器
  * 提供RESTful API接口，实现Schema的CRUD操作
  */
 @RestController
-@RequestMapping("/api/schemas")
+@RequestMapping("/api/schema")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class SchemaController {
 
@@ -55,51 +58,46 @@ public class SchemaController {
     }
 
     /**
-     * 创建Schema
-     * @param schema Schema对象
-     * @return 创建后的Schema
+     * 保存Schema（与前端设计方案一致：POST /api/schema，body: {id?, value}）
+     * - id为空：创建并返回生成的id
+     * - id不为空：存在则更新，不存在则按指定id创建
      */
     @PostMapping
     public ResponseEntity<Schema> createSchema(@RequestBody Schema schema) {
         try {
-            Schema createdSchema = schemaService.createSchema(schema);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdSchema);
+            boolean isCreate = schema.getId() == null || schema.getId().trim().isEmpty();
+            Schema saved = schemaService.saveSchema(schema);
+            return ResponseEntity.status(isCreate ? HttpStatus.CREATED : HttpStatus.OK).body(saved);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     /**
-     * 更新Schema
-     * @param id Schema ID
-     * @param schema Schema对象
-     * @return 更新后的Schema
+     * 删除Schema（前端使用 DELETE /api/schema，body: {id}）
      */
-    @PutMapping("/{id}")
-    public ResponseEntity<Schema> updateSchema(@PathVariable String id, @RequestBody Schema schema) {
-        try {
-            Schema updatedSchema = schemaService.updateSchema(id, schema);
-            if (updatedSchema == null) {
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.ok(updatedSchema);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    @DeleteMapping(value = "/delete")
+    public ResponseEntity<Void> deleteSchema(@RequestBody Map<String, String> body) {
+        String id = body.get("id");
+        if (id == null || id.trim().isEmpty()) {
+            return ResponseEntity.badRequest().build();
         }
+        boolean deleted = schemaService.deleteSchema(id.trim());
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
     /**
-     * 删除Schema
-     * @param id Schema ID
-     * @return 删除结果
+     * 预览Schema：后端根据Schema值生成预览效果（返回HTML片段）
+     * 前端：POST /api/schema/preview, body: { value: ... }
      */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSchema(@PathVariable String id) {
-        boolean deleted = schemaService.deleteSchema(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
+    @PostMapping("/preview")
+    public ResponseEntity<Map<String, String>> previewSchema(@RequestBody Map<String, JsonNode> body) {
+        JsonNode value = body == null ? null : body.get("value");
+        if (value == null || value.isNull()) {
+            return ResponseEntity.badRequest().build();
         }
+        Map<String, String> resp = new HashMap<>();
+        resp.put("html", SchemaPreviewRenderer.render(value));
+        return ResponseEntity.ok(resp);
     }
 }

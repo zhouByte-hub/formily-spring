@@ -4,11 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0f208875-ab27-4e4c-ab8f-c32bfa090b8c" name="Changes" comment="" />
+    <list default="true" id="0f208875-ab27-4e4c-ab8f-c32bfa090b8c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formily/controller/SchemaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formily/controller/SchemaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/formily/service/SchemaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formily/service/SchemaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/formily/controller/SchemaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/formily/controller/SchemaController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/formily/service/SchemaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/formily/service/SchemaService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../formily-web/src/services/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/../formily-web/src/services/api.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
@@ -18,9 +29,9 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="38VHLxvFchY2l0cIRvgNqxiVgbS" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -34,8 +45,12 @@
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "Spring Boot.FormilyBasicApplication.executor": "Debug",
-    "last_opened_file_path": "D:/company/java/formily-spring/formily-basic",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/zhoujianing/Project/java/formily-spring/formily-basic",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -57,8 +72,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.25410.129" />
-        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-IU-251.25410.129" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-IU-252.25557.131" />
       </set>
     </attachedChunks>
   </component>
@@ -71,10 +86,26 @@
       <updated>1751262325535</updated>
       <workItem from="1751262326629" duration="41000" />
       <workItem from="1768877767440" duration="14259000" />
+      <workItem from="1768989756878" duration="9245000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/formily/controller/SchemaController.java</url>
+          <line>79</line>
+          <properties class="com.formily.controller.SchemaController" method="deleteSchema">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
