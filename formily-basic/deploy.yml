@@ -1,0 +1,4 @@
+RELEAS_NAME=formily-basic
+CONFIG_FILE=int-config
+  # NodePort or ClusterIP
+SERVICE_TYPE=NodePort
