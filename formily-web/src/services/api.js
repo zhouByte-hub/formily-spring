@@ -2,9 +2,9 @@ import axios from 'axios'
 
 // 创建axios实例
 const api = axios.create({
-  // Prefer same-origin `/api` (works in prod behind a gateway/proxy).
-  // For local dev, configure Vite proxy to forward `/api` to the backend.
-  baseURL: '/api',
+  // Prefer same-origin `/formily` (works in prod behind a gateway/proxy).
+  // For local dev, configure Vite proxy to forward `/formily` to the backend.
+  baseURL: '/formily',
   timeout: 10000, // 请求超时时间
   headers: {
     'Content-Type': 'application/json'
@@ -38,7 +38,7 @@ const schemaApi = {
   // 删除Schema
   deleteSchema(id) {
     // Use HTTP DELETE for deletion.
-    // Backend API: DELETE /api/schema/delete  body: { "id": "SchemaID" }
+    // Backend API: DELETE /formily/schema/delete  body: { "id": "SchemaID" }
     return api.delete('/schema/delete', { data: { id } })
   },
   // 预览Schema（若后端提供预览接口可启用）

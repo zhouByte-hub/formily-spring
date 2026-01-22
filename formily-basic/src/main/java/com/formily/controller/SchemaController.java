@@ -18,7 +18,7 @@ import java.util.Map;
  * 提供RESTful API接口，实现Schema的CRUD操作
  */
 @RestController
-@RequestMapping("/api/schema")
+@RequestMapping("/schema")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class SchemaController {
 

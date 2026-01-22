@@ -2,22 +2,22 @@
   "id" : "8397cc8400854e0c82cb7da10b3bf909",
   "value" : {
     "datesources" : {
-      "datasource_component_m7njip1mn" : {
-        "id" : "datasource_component_m7njip1mn",
+      "datasource_component_20z2i1uav" : {
+        "id" : "datasource_component_20z2i1uav",
         "method" : "GET",
-        "url" : "http://localhost:8080/api/system/list",
+        "url" : "http://localhost:8080/formily/system/list",
         "params" : [ ]
       },
-      "datasource_component_f2d46gyc4" : {
-        "id" : "datasource_component_f2d46gyc4",
+      "datasource_component_yuot6abdq" : {
+        "id" : "datasource_component_yuot6abdq",
         "method" : "GET",
-        "url" : "http://localhost:8080/business/list",
+        "url" : "http://localhost:8080/formily/business/list",
         "params" : [ ]
       },
-      "datasource_component_sdk5r5lpi" : {
-        "id" : "datasource_component_sdk5r5lpi",
+      "datasource_component_a1h77ywj8" : {
+        "id" : "datasource_component_a1h77ywj8",
         "method" : "GET",
-        "url" : "http://localhost:8080/api/system/operator_system",
+        "url" : "http://localhost:8080/formily/system/operator_system",
         "params" : [ ]
       }
     },
@@ -185,7 +185,7 @@
                     "label" : "选项3",
                     "value" : "option3"
                   } ],
-                  "datesource_id" : "datasource_component_m7njip1mn",
+                  "datesource_id" : "datasource_component_20z2i1uav",
                   "x-decorator-props" : {
                     "style" : {
                       "left" : "80px",
@@ -219,7 +219,7 @@
                     "label" : "选项3",
                     "value" : "option3"
                   } ],
-                  "datesource_id" : "datasource_component_f2d46gyc4",
+                  "datesource_id" : "datasource_component_yuot6abdq",
                   "x-decorator-props" : {
                     "style" : {
                       "left" : "80px",
@@ -584,7 +584,7 @@
                     "label" : "选项3",
                     "value" : "option3"
                   } ],
-                  "datesource_id" : "datasource_component_sdk5r5lpi",
+                  "datesource_id" : "datasource_component_a1h77ywj8",
                   "x-decorator-props" : {
                     "style" : {
                       "left" : "0px",

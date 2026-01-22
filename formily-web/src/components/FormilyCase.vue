@@ -213,9 +213,9 @@ const caseSchema = computed(() => {
 
 const normalizeDatasourceUrl = (url) => {
   if (typeof url !== 'string') return ''
-  // Our axios client has baseURL `/api`. If config.url already starts with `/api/`,
-  // strip that prefix to avoid generating `/api/api/...`.
-  return url.startsWith('/api/') ? url.replace(/^\/api/, '') : url
+  // Our axios client has baseURL `/formily`. If config.url already starts with `/formily/`,
+  // strip that prefix to avoid generating `/formily/formily/...`.
+  return url.startsWith('/formily/') ? url.replace(/^\/formily/, '') : url
 }
 
 const normalizeDatasourceParams = (params) => {

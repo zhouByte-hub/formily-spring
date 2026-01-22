@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = {"/system", "/api/system"})
+@RequestMapping(value = {"/system"})
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class SystemController {
     private static final List<OptionItem> SYSTEM_OPTIONS = List.of(
