@@ -35,6 +35,35 @@
                 <el-icon><Delete /></el-icon>
                 删除
               </el-button>
+              <el-popover
+                placement="bottom-end"
+                :width="720"
+                trigger="click"
+                :teleported="true"
+                :hide-after="0"
+                popper-class="schema-case-popper"
+                @show="() => ensureCaseLoaded(schema.id)"
+              >
+                <template #reference>
+                  <el-button type="warning" size="small" link>
+                    <el-icon><Tickets /></el-icon>
+                    案例
+                  </el-button>
+                </template>
+                <div class="schema-case-popover">
+                  <div v-loading="!!caseState[schema.id]?.loading">
+                    <FormilyCase
+                      v-if="caseState[schema.id]?.data?.value"
+                      :value="caseState[schema.id].data.value"
+                    />
+                    <el-empty
+                      v-else-if="caseState[schema.id]?.error"
+                      description="获取案例失败"
+                    />
+                    <el-empty v-else description="暂无案例数据" />
+                  </div>
+                </div>
+              </el-popover>
             </div>
 
             <div class="schema-card-preview" :title="schema.id">
@@ -75,16 +104,18 @@
         <el-empty v-else description="暂无预览内容" />
       </div>
     </el-dialog>
+
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
-import { Plus, Edit, Delete, View } from '@element-plus/icons-vue'
+import { Plus, Edit, Delete, View, Tickets } from '@element-plus/icons-vue'
 import api from '../services/api.js'
 import FormilyPreview from '../components/FormilyPreview.vue'
+import FormilyCase from '../components/FormilyCase.vue'
 
 const router = useRouter()
 
@@ -103,6 +134,9 @@ const pagedSchemas = computed(() => {
   const start = (currentPage.value - 1) * pageSize.value
   return schemas.value.slice(start, start + pageSize.value)
 })
+
+// Schema 案例数据缓存：{ [schemaId]: { loading, data, error } }
+const caseState = reactive({})
 
 // 预览对话框状态
 const previewDialogVisible = ref(false)
@@ -130,6 +164,29 @@ const fetchSchemas = async () => {
 onMounted(() => {
   fetchSchemas()
 })
+
+const ensureCaseLoaded = async (schemaId) => {
+  if (!schemaId) return
+  // Avoid `||=` here: it can hand us a non-reactive raw object, causing `loading` to never update in UI.
+  if (!caseState[schemaId]) caseState[schemaId] = { loading: false, data: null, error: null }
+  const st = caseState[schemaId]
+  if (st.loading) return
+  // 有数据就直接复用；若想每次打开都刷新，可去掉这个判断
+  if (st.data) return
+
+  st.loading = true
+  st.error = null
+  try {
+    const res = await api.schema.getSchemaCase(schemaId)
+    st.data = res.data
+  } catch (e) {
+    st.error = e
+    ElMessage.error('获取案例失败')
+    console.error('Error fetching schema case:', e)
+  } finally {
+    st.loading = false
+  }
+}
 
 const hasLowCodeEditorData = () => {
   const raw = localStorage.getItem(LOWCODE_STATE_KEY)
@@ -355,6 +412,7 @@ const handleCurrentChange = (page) => {
   z-index: 2;
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .schema-card-preview {
@@ -418,5 +476,12 @@ const handleCurrentChange = (page) => {
 
 .preview-content :deep(.formily-preview-canvas) {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.schema-case-popover {
+  max-height: 70vh;
+  overflow: auto;
+  padding: 8px;
+  background-color: #f5f7fa;
 }
 </style>

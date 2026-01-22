@@ -507,11 +507,7 @@ const components = [
       title: 'Select',
       required: false,
       'x-decorator': 'FormItem',
-      'x-component': 'Select',
-      'enum': [
-        { label: 'A', value: 'a' },
-        { label: 'B', value: 'b' }
-      ]
+      'x-component': 'Select'
     },
     type: 'select',
     name: '下拉列表框',
@@ -523,11 +519,8 @@ const components = [
       defaultValue: '',
       disabled: false, readonly: false, required: false,
       label: '下拉选择',
-      options: [
-        { label: '选项1', value: 'option1' },
-        { label: '选项2', value: 'option2' },
-        { label: '选项3', value: 'option3' }
-      ],
+      // Do not ship hardcoded options; options should come from request (datesource).
+      options: [],
       multiple: false,
       filterable: false,
       remote: false,

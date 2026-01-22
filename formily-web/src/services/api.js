@@ -21,6 +21,10 @@ const schemaApi = {
   getSchemaById(id) {
     return api.get(`/schema/${id}`)
   },
+  // 获取Schema案例（表单 schema + initial_values 等）
+  getSchemaCase(id) {
+    return api.get(`/schema/${id}/case`)
+  },
   // 创建Schema
   createSchema(schema) {
     // 新格式：{ "value": "" }
@@ -44,6 +48,9 @@ const schemaApi = {
 }
 
 // 导出API
+// Expose the underlying axios instance for generic datasource requests.
+export const http = api
+
 export default {
   schema: schemaApi
 }

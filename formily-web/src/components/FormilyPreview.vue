@@ -26,9 +26,13 @@ import {
   ElSwitch,
   ElDatePicker,
   ElSlider,
+  ElRate,
   ElTabs,
   ElTabPane,
-  ElCard
+  ElCard,
+  ElButton,
+  ElDivider,
+  ElLink
 } from 'element-plus'
 
 const props = defineProps({
@@ -242,7 +246,7 @@ const Select = defineComponent({
         {
           default: () =>
             options.value.map((o, idx) =>
-              h(ElOption, { key: o?.value ?? o?.label ?? idx, label: o?.label, value: o?.value })
+              h(ElOption, { key: o?.value ?? o?.label ?? idx, label: o?.label, value: o?.value, disabled: o?.disabled })
             )
         }
       )
@@ -270,7 +274,7 @@ const RadioGroup = defineComponent({
             options.value.map((o, idx) =>
               h(
                 ElRadio,
-                { key: o?.value ?? o?.label ?? idx, value: o?.value ?? o?.label ?? idx },
+                { key: o?.value ?? o?.label ?? idx, value: o?.value ?? o?.label ?? idx, disabled: o?.disabled },
                 { default: () => o?.label ?? '' }
               )
             )
@@ -300,7 +304,7 @@ const CheckboxGroup = defineComponent({
             options.value.map((o, idx) =>
               h(
                 ElCheckbox,
-                { key: o?.value ?? o?.label ?? idx, value: o?.value ?? o?.label ?? idx },
+                { key: o?.value ?? o?.label ?? idx, label: o?.value ?? o?.label ?? idx, disabled: o?.disabled },
                 { default: () => o?.label ?? '' }
               )
             )
@@ -360,6 +364,54 @@ const Slider = defineComponent({
         disabled: p.disabled,
         'onUpdate:modelValue': (v) => emit('change', v)
       })
+  }
+})
+
+const Rate = defineComponent({
+  name: 'Rate',
+  inheritAttrs: false,
+  props: { value: {}, disabled: {} },
+  emits: ['change'],
+  setup(p, { emit }) {
+    return () => h(ElRate, { modelValue: p.value, disabled: p.disabled, 'onUpdate:modelValue': (v) => emit('change', v) })
+  }
+})
+
+const Button = defineComponent({
+  name: 'Button',
+  inheritAttrs: false,
+  props: { text: {}, type: {}, disabled: {}, style: {} },
+  setup(p) {
+    // Void component: style is usually stored in `x-component-props.style`.
+    return () =>
+      h(
+        'div',
+        { style: p.style && typeof p.style === 'object' ? p.style : undefined },
+        { default: () => h(ElButton, { type: p.type || 'primary', disabled: p.disabled, style: { width: '100%', height: '100%' } }, { default: () => p.text ?? '' }) }
+      )
+  }
+})
+
+const Link = defineComponent({
+  name: 'Link',
+  inheritAttrs: false,
+  props: { text: {}, href: {}, target: {}, disabled: {}, style: {} },
+  setup(p) {
+    return () =>
+      h(
+        'div',
+        { style: p.style && typeof p.style === 'object' ? p.style : undefined },
+        { default: () => h(ElLink, { href: p.href, target: p.target, disabled: p.disabled, type: 'primary', underline: false }, { default: () => p.text ?? '' }) }
+      )
+  }
+})
+
+const Divider = defineComponent({
+  name: 'Divider',
+  inheritAttrs: false,
+  props: { style: {} },
+  setup(p) {
+    return () => h('div', { style: p.style && typeof p.style === 'object' ? p.style : undefined }, { default: () => h(ElDivider) })
   }
 })
 
@@ -462,6 +514,10 @@ const { SchemaField } = createSchemaField({
     Switch,
     DateTimePicker,
     Slider,
+    Rate,
+    Button,
+    Link,
+    Divider,
     Tabs,
     Card
   }

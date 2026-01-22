@@ -1,5 +1,5 @@
 <template>
-  <div class="lowcode-editor">
+    <div class="lowcode-editor">
     <!-- 顶部工具栏 -->
     <div class="editor-toolbar">
       <div class="toolbar-left">
@@ -19,6 +19,10 @@
           <el-button @click="toggleGrid">
             <el-icon><ElementPlusIconsVue.Grid /></el-icon>
             网格线
+          </el-button>
+          <el-button @click="openSchemaDialog">
+            <el-icon><ElementPlusIconsVue.Document /></el-icon>
+            Schema
           </el-button>
       </div>
       <div class="toolbar-right">
@@ -85,12 +89,31 @@
         />
       </div>
     </div>
+
+    <el-dialog
+      v-model="schemaDialogVisible"
+      title="当前编辑区 Schema"
+      width="70%"
+      :append-to-body="true"
+    >
+      <el-input
+        v-model="schemaText"
+        type="textarea"
+        :rows="20"
+        readonly
+        spellcheck="false"
+      />
+      <template #footer>
+        <el-button @click="schemaDialogVisible = false">关闭</el-button>
+        <el-button type="primary" @click="copySchema">复制</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
 import { ref, reactive, computed, onMounted, watch } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import ComponentLibrary from './ComponentLibrary.vue'
 import Canvas from './Canvas.vue'
@@ -117,6 +140,9 @@ const selectedComponent = computed(() => {
   if (!editorState.selectedComponentId) return null
   return editorState.components.find(component => component.id === editorState.selectedComponentId)
 })
+
+const schemaDialogVisible = ref(false)
+const schemaText = ref('')
 
 // 画布引用
 const canvasRef = ref(null)
@@ -791,6 +817,42 @@ const generateFormilyData = () => {
   return formilyData
 }
 
+const openSchemaDialog = () => {
+  try {
+    // Only show schema; keep it in sync with what we will save to backend.
+    schemaText.value = JSON.stringify(generateFormilyData().schema, null, 2)
+  } catch (e) {
+    console.error('Failed to generate schema:', e)
+    schemaText.value = ''
+  }
+  schemaDialogVisible.value = true
+}
+
+const copySchema = async () => {
+  const text = schemaText.value || ''
+  try {
+    await navigator.clipboard.writeText(text)
+    ElMessage.success('已复制')
+  } catch {
+    // Fallback for non-secure contexts.
+    try {
+      const el = document.createElement('textarea')
+      el.value = text
+      el.setAttribute('readonly', 'true')
+      el.style.position = 'fixed'
+      el.style.left = '-9999px'
+      document.body.appendChild(el)
+      el.select()
+      document.execCommand('copy')
+      document.body.removeChild(el)
+      ElMessage.success('已复制')
+    } catch (e) {
+      console.error('Copy failed:', e)
+      ElMessage.error('复制失败')
+    }
+  }
+}
+
 // 保存项目
 const saveProject = async () => {
   try {
@@ -855,16 +917,34 @@ const undo = () => {
 
 // 重做
 const redo = () => {
-  if (editorState.historyIndex < editorState.history.length - 1) {
-    editorState.historyIndex++
-    const historyState = JSON.parse(editorState.history[editorState.historyIndex])
-    editorState.components = historyState
-    // 清除选中状态
-    editorState.selectedComponentId = null
-    saveEditorState()
-  } else {
-    ElMessage.info('已经是最新状态')
+  if (!editorState.components?.length) {
+    ElMessage.info('编辑区已为空')
+    return
   }
+
+  ElMessageBox.confirm(
+    '确认要清空编辑区内容吗？清空后需要重新拖拽组件进行编辑。',
+    '清空确认',
+    {
+      confirmButtonText: '确认清空',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }
+  )
+    .then(() => {
+      editorState.components = []
+      editorState.selectedComponentId = null
+      editorState.history = []
+      editorState.historyIndex = -1
+
+      localStorage.removeItem(CURRENT_PROJECT_ID_KEY)
+      localStorage.removeItem(LOWCODE_IMPORT_KEY)
+
+      saveEditorState()
+      recordHistory()
+      ElMessage.success('已清空编辑区')
+    })
+    .catch(() => {})
 }
 
 // 切换网格显示
