@@ -16,7 +16,7 @@
             <template #icon>
               <el-icon><HomeFilled /></el-icon>
             </template>
-            <span>首页</span>
+            <span>编辑器</span>
           </el-menu-item>
           <el-menu-item index="/schemas">
             <template #icon>

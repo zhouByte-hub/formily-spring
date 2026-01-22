@@ -38,7 +38,11 @@
             </div>
 
             <div class="schema-card-preview" :title="schema.id">
-              <FormilyPreview class="schema-card-preview-inner" :value="schema.value" />
+              <div class="schema-preview-viewport">
+                <div class="schema-preview-stage" :style="getStageStyle(schema)">
+                  <FormilyPreview class="schema-card-preview-inner" :value="schema.value" />
+                </div>
+              </div>
             </div>
           </el-card>
         </div>
@@ -188,6 +192,81 @@ const handlePreviewClose = () => {
   previewSchema.value = null
 }
 
+const parsePx = (v) => {
+  if (typeof v === 'number') return v
+  if (typeof v !== 'string') return null
+  const m = v.match(/-?\d+(?:\.\d+)?/)
+  return m ? Number(m[0]) : null
+}
+
+const readNodeStyle = (node) => {
+  const p = node?.['x-component-props']
+  const d = node?.['x-decorator-props']
+  const s = (d && typeof d === 'object' ? d.style : null) || (p && typeof p === 'object' ? p.style : null)
+  return s && typeof s === 'object' ? s : null
+}
+
+const computeBounds = (node) => {
+  let minLeft = Infinity
+  let minTop = Infinity
+  let maxRight = -Infinity
+  let maxBottom = -Infinity
+
+  const walk = (n) => {
+    if (!n || typeof n !== 'object') return
+    const style = readNodeStyle(n)
+    if (style) {
+      const left = parsePx(style.left)
+      const top = parsePx(style.top)
+      const width = parsePx(style.width)
+      const height = parsePx(style.height)
+      if (left !== null && top !== null && width !== null && height !== null) {
+        minLeft = Math.min(minLeft, left)
+        minTop = Math.min(minTop, top)
+        maxRight = Math.max(maxRight, left + width)
+        maxBottom = Math.max(maxBottom, top + height)
+      }
+    }
+
+    const props = n.properties
+    if (props && typeof props === 'object') {
+      for (const key of Object.keys(props)) walk(props[key])
+    }
+  }
+
+  walk(node)
+
+  if (!Number.isFinite(minLeft) || !Number.isFinite(minTop) || !Number.isFinite(maxRight) || !Number.isFinite(maxBottom)) {
+    return { minLeft: 0, minTop: 0, width: 0, height: 0 }
+  }
+  return { minLeft, minTop, width: maxRight - minLeft, height: maxBottom - minTop }
+}
+
+const getStageStyle = (schema) => {
+  // Card size is fixed: 320x140; body padding 10; preview top padding 18.
+  const availableWidth = 320 - 20
+  const availableHeight = 140 - 20 - 18
+
+  const rootSchema = schema?.value?.schema
+  const bounds = computeBounds(rootSchema)
+  const w = bounds.width || 1
+  const h = bounds.height || 1
+
+  // "Cover" mode: fill the card as much as possible (more readable),
+  // overflow is clipped by the card viewport.
+  const scale = Math.min(Math.max(availableWidth / w, availableHeight / h), 1) * 0.9
+  const tx = -bounds.minLeft
+  const ty = -bounds.minTop
+
+  return {
+    position: 'absolute',
+    left: '0px',
+    top: '0px',
+    transformOrigin: 'top left',
+    transform: `translate(${tx}px, ${ty}px) scale(${scale})`
+  }
+}
+
 // 处理删除
 const handleDelete = async (id) => {
   try {
@@ -284,29 +363,25 @@ const handleCurrentChange = (page) => {
   padding-top: 18px; /* 给右上角操作按钮留空间 */
 }
 
+.schema-preview-viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.schema-preview-stage {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 .schema-card-preview-inner {
   pointer-events: none;
 }
 
-/* Mini preview: compact + hide labels so users focus on "schema effect" */
-.schema-card-preview :deep(.el-form-item__label) {
-  display: none;
-}
-
-.schema-card-preview :deep(.el-form-item__content) {
-  margin-left: 0 !important;
-}
-
-.schema-card-preview :deep(.el-form-item) {
-  margin-bottom: 6px;
-}
-
 .schema-card-preview :deep(.formily-preview) {
-  --preview-scale: 0.55;
   padding: 0;
-  transform: scale(var(--preview-scale));
-  transform-origin: top left;
-  width: calc(100% / var(--preview-scale));
 }
 
 .pagination-container {

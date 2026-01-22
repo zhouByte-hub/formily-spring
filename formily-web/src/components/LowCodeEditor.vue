@@ -19,6 +19,7 @@
           <el-button @click="toggleGrid">
             <el-icon><ElementPlusIconsVue.Grid /></el-icon>
             网格线
+          </el-button>
           <el-switch
             v-model="editorState.showGrid"
             size="small"
@@ -26,8 +27,8 @@
             active-text="显示"
             inactive-text="隐藏"
             class="switch-inline"
+            @change="handleGridChange"
           />
-        </el-button>
       </div>
       <div class="toolbar-right">
         <el-breadcrumb separator="/">
@@ -837,15 +838,13 @@ const saveProject = async () => {
 
 // 记录历史
 const recordHistory = () => {
-  // 移除当前索引之后的历史
+  // Drop redo branch, then push the *current* snapshot.
   editorState.history = editorState.history.slice(0, editorState.historyIndex + 1)
-  // 保存当前状态
   editorState.history.push(JSON.stringify(editorState.components))
-  // 限制历史记录数量
+  editorState.historyIndex = editorState.history.length - 1
   if (editorState.history.length > 50) {
     editorState.history.shift()
-  } else {
-    editorState.historyIndex++
+    editorState.historyIndex = editorState.history.length - 1
   }
 }
 
@@ -857,6 +856,7 @@ const undo = () => {
     editorState.components = historyState
     // 清除选中状态
     editorState.selectedComponentId = null
+    saveEditorState()
   } else {
     ElMessage.info('已经是最早状态')
   }
@@ -870,6 +870,7 @@ const redo = () => {
     editorState.components = historyState
     // 清除选中状态
     editorState.selectedComponentId = null
+    saveEditorState()
   } else {
     ElMessage.info('已经是最新状态')
   }
@@ -878,6 +879,10 @@ const redo = () => {
 // 切换网格显示
 const toggleGrid = () => {
   editorState.showGrid = !editorState.showGrid
+  saveEditorState()
+}
+
+const handleGridChange = () => {
   saveEditorState()
 }
 
@@ -913,8 +918,8 @@ const handleUpdateComponent = (updatedComponent) => {
   
   const index = editorState.components.findIndex(c => c.id === updatedComponent.id)
   if (index !== -1) {
-    recordHistory() // 记录历史
     editorState.components[index] = updatedComponent
+    recordHistory() // 记录历史（记录变更后的状态，支持 redo）
     saveEditorState()
   }
 }
@@ -927,17 +932,15 @@ const handleAddComponent = (newComponent) => {
   console.log('新组件的tabName:', newComponent.props.tabName)
   console.log('===========================')
   
-  recordHistory() // 记录历史
   editorState.components.push(newComponent)
   editorState.selectedComponentId = newComponent.id
+  recordHistory() // 记录历史（记录变更后的状态，支持 redo）
   saveEditorState()
 }
 
 // 处理属性更新
 const handleUpdateProperty = (propertyName, value) => {
   if (!selectedComponent.value) return
-  
-  recordHistory() // 记录历史
   
   // 更新组件属性
   const component = editorState.components.find(c => c.id === selectedComponent.value.id)
@@ -983,7 +986,7 @@ const handleUpdateProperty = (propertyName, value) => {
         component.props[propertyName] = value
       }
     }
-    
+    recordHistory() // 记录历史（记录变更后的状态，支持 redo）
     saveEditorState()
   }
 }

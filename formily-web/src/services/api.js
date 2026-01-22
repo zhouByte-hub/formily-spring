@@ -33,8 +33,9 @@ const schemaApi = {
   },
   // 删除Schema
   deleteSchema(id) {
-    // Backend API: GET /api/schema/delete?id=SchemaID
-    return api.get('/schema/delete', { params: { id } })
+    // Use HTTP DELETE for deletion.
+    // Backend API: DELETE /api/schema/delete  body: { "id": "SchemaID" }
+    return api.delete('/schema/delete', { data: { id } })
   },
   // 预览Schema（若后端提供预览接口可启用）
   // previewSchema(schema) {
