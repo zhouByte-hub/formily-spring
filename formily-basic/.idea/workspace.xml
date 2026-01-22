@@ -5,23 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0f208875-ab27-4e4c-ab8f-c32bfa090b8c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/formily/controller/BusinessController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/formily/controller/SystemController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/formily/controller/SchemaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formily/controller/SchemaController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/formily/service/SchemaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/formily/service/SchemaService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/schema/8397cc8400854e0c82cb7da10b3bf909.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/schema/8397cc8400854e0c82cb7da10b3bf909.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/formily/controller/SchemaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/formily/controller/SchemaController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/formily/service/SchemaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/formily/service/SchemaService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/schema/0df25180c5a24404a63d94f8eda83383.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/schema/5044bb9afa714dfe93f5559fee88adb8.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/schema/8397cc8400854e0c82cb7da10b3bf909.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/schema/8397cc8400854e0c82cb7da10b3bf909.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../formily-web/src/components/ComponentLibrary.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../formily-web/src/components/ComponentLibrary.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../formily-web/src/components/FormilyPreview.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../formily-web/src/components/FormilyPreview.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../formily-web/src/components/LowCodeEditor.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../formily-web/src/components/LowCodeEditor.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../formily-web/src/services/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/../formily-web/src/services/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../formily-web/src/views/SchemaList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../formily-web/src/views/SchemaList.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data/1093991860ad4c8daba7109c051ee5f0.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/schema/1093991860ad4c8daba7109c051ee5f0.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +88,7 @@
       <updated>1751262325535</updated>
       <workItem from="1751262326629" duration="41000" />
       <workItem from="1768877767440" duration="14259000" />
-      <workItem from="1768989756878" duration="20723000" />
+      <workItem from="1768989756878" duration="22355000" />
     </task>
     <servers />
   </component>
