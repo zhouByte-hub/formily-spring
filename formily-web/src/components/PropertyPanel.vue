@@ -153,6 +153,48 @@
                 class="property-input"
               />
             </div>
+
+            <!-- Tabs 子组件：选择所在的标签页 -->
+            <div v-if="parentTabOptions.length" class="property-item">
+              <label class="property-label">所在标签页</label>
+              <el-select
+                v-model="contentProps.tabName"
+                placeholder="请选择标签页"
+                class="property-input"
+                @change="handleContentChange('tabName')"
+              >
+                <el-option
+                  v-for="opt in parentTabOptions"
+                  :key="opt.value"
+                  :label="opt.label"
+                  :value="opt.value"
+                />
+              </el-select>
+            </div>
+
+            <!-- Tabs 组件：编辑每个 Tab 的显示名称（label/title） -->
+            <div v-if="isTabsComponent && tabsListKey" class="property-item">
+              <label class="property-label">标签页名称</label>
+              <div class="tabs-editor">
+                <div
+                  v-for="(tab, index) in contentProps[tabsListKey]"
+                  :key="tab.name ?? index"
+                  class="tab-editor-row"
+                >
+                  <el-input
+                    v-model="tab[tabsTitleKey]"
+                    placeholder="请输入标签页名称"
+                    class="tab-title-input"
+                    @input="emit('update-property', 'props', { [tabsListKey]: contentProps[tabsListKey] })"
+                  />
+                  <el-input
+                    :model-value="tab.name"
+                    disabled
+                    class="tab-name-input"
+                  />
+                </div>
+              </div>
+            </div>
             
             <!-- 禁用、只读、必填属性行 -->
             <!-- 对于非按钮组件，禁用属性显示在这里 -->
@@ -460,6 +502,11 @@ const props = defineProps({
   selectedComponent: {
     type: Object,
     default: null
+  },
+  // Used for cross-component config (e.g. tabs child selecting its parent tab)
+  editorState: {
+    type: Object,
+    default: null
   }
 })
 
@@ -517,6 +564,39 @@ const hasButtonStyleProps = computed(() => {
          contentProps.value.hasOwnProperty('circle') || 
          contentProps.value.hasOwnProperty('plain') || 
          contentProps.value.hasOwnProperty('link')
+})
+
+const isTabsComponent = computed(() => props.selectedComponent?.type === 'tabs')
+
+const tabsListKey = computed(() => {
+  if (!props.selectedComponent) return null
+  // form tabs vs display tabs
+  if (Array.isArray(contentProps.value?.tabs)) return 'tabs'
+  if (Array.isArray(contentProps.value?.items)) return 'items'
+  return null
+})
+
+const tabsTitleKey = computed(() => (tabsListKey.value === 'items' ? 'title' : 'label'))
+
+const parentTabsComponent = computed(() => {
+  const id = props.selectedComponent?.parentId
+  const list = props.editorState?.components
+  if (!id || !Array.isArray(list)) return null
+  const parent = list.find(c => c.id === id)
+  return parent?.type === 'tabs' ? parent : null
+})
+
+const parentTabOptions = computed(() => {
+  const parent = parentTabsComponent.value
+  if (!parent) return []
+  const tabs = Array.isArray(parent.props?.tabs) ? parent.props.tabs : null
+  const items = Array.isArray(parent.props?.items) ? parent.props.items : null
+  const list = tabs || items || []
+  const titleKey = tabs ? 'label' : 'title'
+  return list.map((t) => ({
+    label: t?.[titleKey] ?? t?.name ?? '',
+    value: t?.name
+  })).filter(o => o.value !== undefined && o.value !== null)
 })
 
 // 请求配置
@@ -835,7 +915,8 @@ const validateRequestParams = () => {
 .property-panel {
   display: flex;
   flex-direction: column;
-  height: calc(100% - 50px);
+  flex: 1;
+  min-height: 0; /* enable vertical scrolling inside a flex column */
   overflow: hidden;
 }
 
@@ -853,6 +934,27 @@ const validateRequestParams = () => {
   flex: 1;
   overflow-y: auto;
   padding: 16px;
+}
+
+.tabs-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tab-editor-row {
+  display: grid;
+  grid-template-columns: 1fr 110px;
+  gap: 10px;
+  align-items: center;
+}
+
+.tab-title-input {
+  width: 100%;
+}
+
+.tab-name-input {
+  width: 100%;
 }
 
 /* 组件基本信息 */

@@ -2,7 +2,9 @@ import axios from 'axios'
 
 // 创建axios实例
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api', // 后端API基础URL
+  // Prefer same-origin `/api` (works in prod behind a gateway/proxy).
+  // For local dev, configure Vite proxy to forward `/api` to the backend.
+  baseURL: '/api',
   timeout: 10000, // 请求超时时间
   headers: {
     'Content-Type': 'application/json'
@@ -31,14 +33,13 @@ const schemaApi = {
   },
   // 删除Schema
   deleteSchema(id) {
-    // 新格式：{ "id": "" }
-    return api.delete('/schema', { data: { id } })
+    // Backend API: GET /api/schema/delete?id=SchemaID
+    return api.get('/schema/delete', { params: { id } })
   },
-  // 预览Schema
-  previewSchema(schema) {
-    // 预览功能：后端根据Schema生成预览效果
-    return api.post('/schema/preview', { value: schema })
-  }
+  // 预览Schema（若后端提供预览接口可启用）
+  // previewSchema(schema) {
+  //   return api.post('/schema/preview', { value: schema })
+  // }
 }
 
 // 导出API

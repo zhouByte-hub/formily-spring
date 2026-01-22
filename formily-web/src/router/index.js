@@ -3,7 +3,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 // 导入页面组件
 const LowCodeHome = () => import('../views/LowCodeHome.vue')
 const SchemaList = () => import('../views/SchemaList.vue')
-const FormList = () => import('../views/FormList.vue')
 
 // 路由配置
 const routes = [
@@ -16,11 +15,6 @@ const routes = [
     path: '/schemas',
     name: 'SchemaList',
     component: SchemaList
-  },
-  {
-    path: '/forms',
-    name: 'FormList',
-    component: FormList
   }
 ]
 

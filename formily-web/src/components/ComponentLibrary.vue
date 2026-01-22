@@ -59,7 +59,7 @@
             <!-- 单选按钮 -->
             <template v-else-if="component.type === 'radio'">
               <el-radio-group size="small">
-                <el-radio label="1">选项</el-radio>
+                <el-radio value="1">选项</el-radio>
               </el-radio-group>
             </template>
             <!-- 复选按钮 -->
@@ -303,8 +303,7 @@ import { Loading, Box } from '@element-plus/icons-vue'
 const categories = [
   { label: '基础组件', value: 'basic' },
   { label: '表单组件', value: 'form' },
-  { label: '数据展示', value: 'display' },
-  { label: '布局组件', value: 'layout' }
+  { label: '数据展示', value: 'display' }
 ]
 
 // 组件列表数据
@@ -1832,7 +1831,8 @@ const handleCategoryChange = () => {
 .component-library {
   display: flex;
   flex-direction: column;
-  height: calc(100% - 50px);
+  flex: 1;
+  min-height: 0; /* enable vertical scrolling inside a flex column */
   overflow: hidden;
   background: #f5f7fa;
 }
@@ -1941,7 +1941,6 @@ const handleCategoryChange = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f5f7fa;
   border-radius: 8px;
   flex-shrink: 0;
   overflow: hidden;

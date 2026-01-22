@@ -127,7 +127,8 @@ h1, h2, h3, h4, h5, h6 {
 /* 对话框样式 */
 .el-dialog {
   border-radius: 12px;
-  overflow: hidden;
+  /* Avoid clipping absolutely-positioned preview/canvas content inside dialogs. */
+  overflow: visible;
 }
 
 .el-dialog__header {

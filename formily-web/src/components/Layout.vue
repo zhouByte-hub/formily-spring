@@ -3,7 +3,7 @@
     <!-- 顶部导航栏 -->
     <header class="app-header">
       <div class="header-content">
-        <h1 class="logo">Formily 动态表单系统</h1>
+        <h1 class="logo">Formily 动态表单案例</h1>
         
         <!-- 顶部菜单 -->
         <el-menu
@@ -23,12 +23,6 @@
               <el-icon><Setting /></el-icon>
             </template>
             <span>Schema管理</span>
-          </el-menu-item>
-          <el-menu-item index="/forms">
-            <template #icon>
-              <el-icon><Document /></el-icon>
-            </template>
-            <span>表单管理</span>
           </el-menu-item>
         </el-menu>
         
@@ -62,10 +56,11 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { HomeFilled, Setting, Document } from '@element-plus/icons-vue'
+import { HomeFilled, Setting } from '@element-plus/icons-vue'
 
 // 用户头像
-const userAvatar = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
+// 避免依赖外网资源（网络受限/离线场景）
+const userAvatar = ref('')
 
 // 获取当前路由
 const route = useRoute()
@@ -140,6 +135,10 @@ const activeMenu = computed(() => {
   transition: all 0.3s ease;
   background-color: transparent !important;
   border-bottom: 3px solid transparent;
+}
+
+.el-menu--horizontal.el-menu {
+    border-bottom: 0px !important;
 }
 
 .top-menu .el-menu-item:hover,

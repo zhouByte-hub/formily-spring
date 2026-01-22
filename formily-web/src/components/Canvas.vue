@@ -29,7 +29,7 @@
       
       <!-- 组件直接渲染在画布上（无额外父容器包装） -->
       <template
-        v-for="component in editorState.components"
+        v-for="component in rootComponents"
         :key="component.id"
       >
         <!-- 表单组件 -->
@@ -113,9 +113,9 @@
                   :direction="component.props.direction" 
                 >
                   <el-radio 
-                    v-for="option in component.props.options" 
-                    :key="option.value" 
-                    :label="option.value" 
+                    v-for="(option, idx) in component.props.options" 
+                    :key="option.value ?? option.label ?? idx" 
+                    :value="option.value ?? option.label ?? idx" 
                   >{{ option.label }}</el-radio>
                 </el-radio-group>
               </el-form-item>
@@ -128,9 +128,9 @@
                   :direction="component.props.direction" 
                 >
                   <el-checkbox 
-                    v-for="option in component.props.options" 
-                    :key="option.value" 
-                    :label="option.value" 
+                    v-for="(option, idx) in component.props.options" 
+                    :key="option.value ?? option.label ?? idx" 
+                    :value="option.value ?? option.label ?? idx" 
                   >{{ option.label }}</el-checkbox>
                 </el-checkbox-group>
               </el-form-item>
@@ -212,6 +212,8 @@
                 :disabled="component.props.disabled"
                 :style="component.style"
                 @click.stop="handleComponentClick(component)"
+                @dragover.stop.prevent
+                @drop.stop.prevent="handleTabsContainerDrop(component, $event)"
                 @tab-add="handleTabAdd(component)"
                 @tab-remove="handleTabRemove(component, $event)"
               >
@@ -223,8 +225,8 @@
                 >
                   <!-- 渲染tab内部的子组件 -->
                   <div class="tab-content" 
-                    @dragover.prevent
-                    @drop="handleTabDrop(component, tab, $event)"
+                    @dragover.stop.prevent
+                    @drop.stop="handleTabDrop(component, tab, $event)"
                     @keydown.delete="handleKeyDown($event, component)"
                   >
                     <!-- 查找该tab下的所有子组件 -->
@@ -316,9 +318,9 @@
                                 :direction="child.props.direction" 
                               >
                                 <el-radio 
-                                  v-for="option in child.props.options" 
-                                  :key="option.value" 
-                                  :label="option.value" 
+                                  v-for="(option, idx) in child.props.options" 
+                                  :key="option.value ?? option.label ?? idx" 
+                                  :value="option.value ?? option.label ?? idx" 
                                 >{{ option.label }}</el-radio>
                               </el-radio-group>
                             </el-form-item>
@@ -331,9 +333,9 @@
                                 :direction="child.props.direction" 
                               >
                                 <el-checkbox 
-                                  v-for="option in child.props.options" 
-                                  :key="option.value" 
-                                  :label="option.value" 
+                                  v-for="(option, idx) in child.props.options" 
+                                  :key="option.value ?? option.label ?? idx" 
+                                  :value="option.value ?? option.label ?? idx" 
                                 >{{ option.label }}</el-checkbox>
                               </el-checkbox-group>
                             </el-form-item>
@@ -611,6 +613,8 @@
                 :editable="component.props.editable"
                 :style="component.style"
                 @tab-click="handleComponentClick(component)"
+                @dragover.stop.prevent
+                @drop.stop.prevent="handleTabsContainerDrop(component, $event)"
                 @tab-add="handleTabAdd(component)"
                 @tab-remove="handleTabRemove(component, $event)"
               >
@@ -622,8 +626,8 @@
                 >
                   <!-- 渲染tab内部的子组件 -->
                   <div class="tab-content" 
-                    @dragover.prevent
-                    @drop="handleTabDrop(component, item, $event)"
+                    @dragover.stop.prevent
+                    @drop.stop="handleTabDrop(component, item, $event)"
                     @keydown.delete="handleKeyDown($event, component)"
                   >
                     <!-- 查找该tab下的所有子组件 -->
@@ -943,6 +947,10 @@ const props = defineProps({
   }
 })
 
+// Keep a stable reference for template + script usage.
+// (In <script setup>, props are not auto-exposed to script as variables like in template.)
+const editorState = props.editorState
+
 // Emits
 const emit = defineEmits(['select-component', 'update-component', 'add-component'])
 
@@ -994,6 +1002,11 @@ const dragPreviewStyle = computed(() => ({
   pointerEvents: 'none',
   zIndex: '1000'
 }))
+
+// Only render root components on the canvas; nested components are rendered by their containers (e.g. Tabs).
+const rootComponents = computed(() =>
+  (editorState.components || []).filter(c => !c.parentId)
+)
 
 // 生成唯一ID
 const generateId = () => {
@@ -1155,6 +1168,8 @@ const handleTabRemove = (component, tabName) => {
 // 处理tab内容区域的拖拽放置
 const handleTabDrop = (component, tab, event) => {
   event.preventDefault()
+  event.stopPropagation()
+  isDragging.value = false
   
   try {
     // 获取拖拽的组件数据
@@ -1194,7 +1209,25 @@ const handleTabDrop = (component, tab, event) => {
     emit('add-component', newComponent)
   } catch (error) {
     console.error('Failed to handle tab drop:', error)
+  } finally {
+    // 清除拖拽预览（避免tab内放置后预览残留）
+    dragPreviewComponent.value = null
+    dragOffset.value = { x: 0, y: 0 }
   }
+}
+
+// 处理落在 Tabs 容器（包含 header 区域）的放置：默认进入当前激活 tab
+const handleTabsContainerDrop = (component, event) => {
+  event.preventDefault()
+  event.stopPropagation()
+
+  const activeName =
+    component?.props?.activeName ||
+    component?.props?.tabs?.[0]?.name ||
+    component?.props?.items?.[0]?.name ||
+    '1'
+
+  handleTabDrop(component, { name: activeName }, event)
 }
 
 // 处理键盘删除事件
