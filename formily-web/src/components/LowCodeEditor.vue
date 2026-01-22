@@ -20,15 +20,6 @@
             <el-icon><ElementPlusIconsVue.Grid /></el-icon>
             网格线
           </el-button>
-          <el-switch
-            v-model="editorState.showGrid"
-            size="small"
-            inline-prompt
-            active-text="显示"
-            inactive-text="隐藏"
-            class="switch-inline"
-            @change="handleGridChange"
-          />
       </div>
       <div class="toolbar-right">
         <el-breadcrumb separator="/">
