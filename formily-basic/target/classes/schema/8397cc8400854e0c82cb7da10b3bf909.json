@@ -1,32 +1,26 @@
 {
   "id" : "8397cc8400854e0c82cb7da10b3bf909",
   "value" : {
-    "initial_values" : {
-      "tab" : "",
-      "host_name" : "",
-      "ip" : "",
-      "mac_address" : "",
-      "serial_number" : "",
-      "system" : "",
-      "business" : "",
-      "description" : "",
-      "network" : "",
-      "computer_room" : "",
-      "cabinet" : "",
-      "host_description" : "",
-      "cpu_model" : "",
-      "cpu_count" : "",
-      "memory_model" : "",
-      "memory_count" : "",
-      "desk_model" : "",
-      "desk_count" : "",
-      "gpu" : "",
-      "operator_system" : "",
-      "manufacturer" : "",
-      "factory_time" : "",
-      "is_domestic" : ""
+    "datesources" : {
+      "datasource_component_m7njip1mn" : {
+        "id" : "datasource_component_m7njip1mn",
+        "method" : "GET",
+        "url" : "http://localhost:8080/api/system/list",
+        "params" : [ ]
+      },
+      "datasource_component_f2d46gyc4" : {
+        "id" : "datasource_component_f2d46gyc4",
+        "method" : "GET",
+        "url" : "http://localhost:8080/business/list",
+        "params" : [ ]
+      },
+      "datasource_component_sdk5r5lpi" : {
+        "id" : "datasource_component_sdk5r5lpi",
+        "method" : "GET",
+        "url" : "http://localhost:8080/api/system/operator_system",
+        "params" : [ ]
+      }
     },
-    "datesources" : { },
     "schema" : {
       "type" : "object",
       "properties" : {
@@ -48,11 +42,11 @@
               "content" : "标签3内容"
             } ],
             "style" : {
-              "width" : "560px",
-              "height" : "580px",
               "left" : "80px",
               "top" : "40px",
               "position" : "absolute",
+              "width" : "560px",
+              "height" : "580px",
               "display" : "flex",
               "flexDirection" : "column",
               "gap" : "8px",
@@ -62,6 +56,7 @@
               "border" : "1px solid #ebeef5"
             }
           },
+          "required" : false,
           "properties" : {
             "tab_1" : {
               "type" : "void",
@@ -77,13 +72,15 @@
                   "x-decorator" : "FormItem",
                   "x-component" : "Input",
                   "x-component-props" : {
-                    "placeholder" : "请输入主机名称",
+                    "placeholder" : "请输入主机名称"
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "360px",
-                      "height" : "60px",
                       "left" : "80px",
                       "top" : "0px",
                       "position" : "absolute",
+                      "width" : "360px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -101,13 +98,15 @@
                   "x-decorator" : "FormItem",
                   "x-component" : "Input",
                   "x-component-props" : {
-                    "placeholder" : "请输入IP，例如：192.168.1.1",
+                    "placeholder" : "请输入IP，例如：192.168.1.1"
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "360px",
-                      "height" : "60px",
                       "left" : "80px",
                       "top" : "60px",
                       "position" : "absolute",
+                      "width" : "360px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -125,13 +124,15 @@
                   "x-decorator" : "FormItem",
                   "x-component" : "Input",
                   "x-component-props" : {
-                    "placeholder" : "请输入机器 MAC 地址",
+                    "placeholder" : "请输入机器 MAC 地址"
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "360px",
-                      "height" : "60px",
                       "left" : "80px",
                       "top" : "120px",
                       "position" : "absolute",
+                      "width" : "360px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -149,13 +150,15 @@
                   "x-decorator" : "FormItem",
                   "x-component" : "Input",
                   "x-component-props" : {
-                    "placeholder" : "请输入设备序列号",
+                    "placeholder" : "请输入设备序列号"
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "360px",
-                      "height" : "60px",
                       "left" : "80px",
                       "top" : "180px",
                       "position" : "absolute",
+                      "width" : "360px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -182,13 +185,14 @@
                     "label" : "选项3",
                     "value" : "option3"
                   } ],
-                  "x-component-props" : {
+                  "datesource_id" : "datasource_component_m7njip1mn",
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "360px",
-                      "height" : "60px",
                       "left" : "80px",
                       "top" : "240px",
                       "position" : "absolute",
+                      "width" : "360px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -215,13 +219,14 @@
                     "label" : "选项3",
                     "value" : "option3"
                   } ],
-                  "x-component-props" : {
+                  "datesource_id" : "datasource_component_f2d46gyc4",
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "360px",
-                      "height" : "60px",
                       "left" : "80px",
                       "top" : "300px",
                       "position" : "absolute",
+                      "width" : "360px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -240,13 +245,15 @@
                   "x-component" : "Textarea",
                   "x-component-props" : {
                     "placeholder" : "请输入主机描述",
-                    "rows" : 4,
+                    "rows" : 4
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "360px",
-                      "height" : "120px",
                       "left" : "80px",
                       "top" : "360px",
                       "position" : "absolute",
+                      "width" : "360px",
+                      "height" : "120px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -273,13 +280,15 @@
                   "x-decorator" : "FormItem",
                   "x-component" : "Input",
                   "x-component-props" : {
-                    "placeholder" : "请输入云主机所属网段",
+                    "placeholder" : "请输入云主机所属网段"
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "360px",
-                      "height" : "60px",
                       "left" : "80px",
                       "top" : "20px",
                       "position" : "absolute",
+                      "width" : "360px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -297,13 +306,15 @@
                   "x-decorator" : "FormItem",
                   "x-component" : "Input",
                   "x-component-props" : {
-                    "placeholder" : "请输入云主机所属机房",
+                    "placeholder" : "请输入云主机所属机房"
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "360px",
-                      "height" : "60px",
                       "left" : "80px",
                       "top" : "80px",
                       "position" : "absolute",
+                      "width" : "360px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -321,13 +332,15 @@
                   "x-decorator" : "FormItem",
                   "x-component" : "Input",
                   "x-component-props" : {
-                    "placeholder" : "请输入云主机所属机柜",
+                    "placeholder" : "请输入云主机所属机柜"
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "360px",
-                      "height" : "60px",
                       "left" : "80px",
                       "top" : "140px",
                       "position" : "absolute",
+                      "width" : "360px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -345,13 +358,15 @@
                   "x-decorator" : "FormItem",
                   "x-component" : "Input",
                   "x-component-props" : {
-                    "placeholder" : "请输入主机详情，例如：华为云·华东",
+                    "placeholder" : "请输入主机详情，例如：华为云·华东"
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "360px",
-                      "height" : "60px",
                       "left" : "80px",
                       "top" : "200px",
                       "position" : "absolute",
+                      "width" : "360px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -378,13 +393,15 @@
                   "x-decorator" : "FormItem",
                   "x-component" : "Input",
                   "x-component-props" : {
-                    "placeholder" : "请输入 CPU 型号",
+                    "placeholder" : "请输入 CPU 型号"
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "240px",
-                      "height" : "60px",
                       "left" : "0px",
                       "top" : "0px",
                       "position" : "absolute",
+                      "width" : "240px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -402,13 +419,15 @@
                   "x-decorator" : "FormItem",
                   "x-component" : "Input",
                   "x-component-props" : {
-                    "placeholder" : "请输入CPU 核数",
+                    "placeholder" : "请输入CPU 核数"
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "240px",
-                      "height" : "60px",
                       "left" : "280px",
                       "top" : "0px",
                       "position" : "absolute",
+                      "width" : "240px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -426,13 +445,15 @@
                   "x-decorator" : "FormItem",
                   "x-component" : "Input",
                   "x-component-props" : {
-                    "placeholder" : "请输入内存型号",
+                    "placeholder" : "请输入内存型号"
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "240px",
-                      "height" : "60px",
                       "left" : "0px",
                       "top" : "60px",
                       "position" : "absolute",
+                      "width" : "240px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -450,13 +471,15 @@
                   "x-decorator" : "FormItem",
                   "x-component" : "Input",
                   "x-component-props" : {
-                    "placeholder" : "请输入内存大小",
+                    "placeholder" : "请输入内存大小"
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "240px",
-                      "height" : "60px",
                       "left" : "280px",
                       "top" : "60px",
                       "position" : "absolute",
+                      "width" : "240px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -474,13 +497,15 @@
                   "x-decorator" : "FormItem",
                   "x-component" : "Input",
                   "x-component-props" : {
-                    "placeholder" : "请输入磁盘型号",
+                    "placeholder" : "请输入磁盘型号"
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "240px",
-                      "height" : "60px",
                       "left" : "0px",
                       "top" : "120px",
                       "position" : "absolute",
+                      "width" : "240px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -498,13 +523,15 @@
                   "x-decorator" : "FormItem",
                   "x-component" : "Input",
                   "x-component-props" : {
-                    "placeholder" : "请输入磁盘容量",
+                    "placeholder" : "请输入磁盘容量"
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "240px",
-                      "height" : "60px",
                       "left" : "280px",
                       "top" : "120px",
                       "position" : "absolute",
+                      "width" : "240px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -522,13 +549,15 @@
                   "x-decorator" : "FormItem",
                   "x-component" : "Input",
                   "x-component-props" : {
-                    "placeholder" : "请输入主机所属的 GPU 规格信息",
+                    "placeholder" : "请输入主机所属的 GPU 规格信息"
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "520px",
-                      "height" : "60px",
                       "left" : "0px",
                       "top" : "180px",
                       "position" : "absolute",
+                      "width" : "520px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -555,13 +584,14 @@
                     "label" : "选项3",
                     "value" : "option3"
                   } ],
-                  "x-component-props" : {
+                  "datesource_id" : "datasource_component_sdk5r5lpi",
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "520px",
-                      "height" : "60px",
                       "left" : "0px",
                       "top" : "240px",
                       "position" : "absolute",
+                      "width" : "520px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -579,13 +609,15 @@
                   "x-decorator" : "FormItem",
                   "x-component" : "Input",
                   "x-component-props" : {
-                    "placeholder" : "请输入主机所属厂商",
+                    "placeholder" : "请输入主机所属厂商"
+                  },
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "520px",
-                      "height" : "60px",
                       "left" : "0px",
                       "top" : "300px",
                       "position" : "absolute",
+                      "width" : "520px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -602,13 +634,13 @@
                   "required" : false,
                   "x-decorator" : "FormItem",
                   "x-component" : "DateTimePicker",
-                  "x-component-props" : {
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "300px",
-                      "height" : "60px",
                       "left" : "0px",
                       "top" : "360px",
                       "position" : "absolute",
+                      "width" : "300px",
+                      "height" : "60px",
                       "display" : "flex",
                       "flexDirection" : "row",
                       "gap" : "8px",
@@ -625,13 +657,13 @@
                   "required" : true,
                   "x-decorator" : "FormItem",
                   "x-component" : "Switch",
-                  "x-component-props" : {
+                  "x-decorator-props" : {
                     "style" : {
-                      "width" : "200px",
-                      "height" : "60px",
                       "left" : "360px",
                       "top" : "360px",
                       "position" : "absolute",
+                      "width" : "200px",
+                      "height" : "60px",
                       "display" : "flex",
                       "alignItems" : "center",
                       "gap" : "12px",

@@ -100,4 +100,18 @@ public class SchemaController {
         resp.put("html", SchemaPreviewRenderer.render(value));
         return ResponseEntity.ok(resp);
     }
+
+    /**
+     * 案例：返回Schema对象，但 value.initial_values 从 resources/data/{id}.json 读取，
+     * 以便前端点击“案例”按钮时能展示该schema对应的数据。
+     */
+    @GetMapping("/{id}/case")
+    public ResponseEntity<Schema> getSchemaCase(@PathVariable String id) {
+        try {
+            Schema schema = schemaService.getSchemaById(id);
+            return schema == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(schema);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

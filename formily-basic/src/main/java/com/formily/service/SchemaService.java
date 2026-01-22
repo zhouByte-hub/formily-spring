@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.SecureRandom;
 import java.util.*;
 
 /**
@@ -23,6 +24,7 @@ import java.util.*;
 public class SchemaService {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Random random = new SecureRandom();
     private final String schemaDir;
     private final String dataDir;
 
@@ -91,6 +93,7 @@ public class SchemaService {
         // 生成唯一ID
         String id = UUID.randomUUID().toString().replace("-", "");
         schema.setId(id);
+        ensureInitialValuesPopulated(schema);
         persistInitialValuesToData(schema);
         // 写入文件
         writeSchemaToFile(schema);
@@ -180,6 +183,7 @@ public class SchemaService {
             return updateSchema(schema.getId(), schema);
         }
         // Create with client-provided id
+        ensureInitialValuesPopulated(schema);
         persistInitialValuesToData(schema);
         writeSchemaToFile(schema);
         return schema;
@@ -212,13 +216,132 @@ public class SchemaService {
         saveSchemaData(schema.getId(), initialValues);
     }
 
+    private void ensureInitialValuesPopulated(Schema schema) {
+        if (schema == null) return;
+        JsonNode value = schema.getValue();
+        if (value == null || !value.isObject()) return;
+        ObjectNode valueObj = (ObjectNode) value;
+
+        ObjectNode initialObj;
+        JsonNode existing = valueObj.get("initial_values");
+        if (existing != null && existing.isObject()) {
+            initialObj = (ObjectNode) existing;
+        } else {
+            initialObj = objectMapper.createObjectNode();
+            valueObj.set("initial_values", initialObj);
+        }
+
+        JsonNode schemaNode =
+                (valueObj.hasNonNull("schema") && valueObj.get("schema").isObject())
+                        ? valueObj.get("schema")
+                        : valueObj;
+
+        // Fill missing/blank fields; keep any client-provided non-empty values.
+        collectInitialValues(initialObj, schemaNode);
+    }
+
+    private void collectInitialValues(ObjectNode out, JsonNode schemaNode) {
+        if (schemaNode == null || schemaNode.isNull()) return;
+
+        // Formily schema commonly uses { properties: { ... } } as the container.
+        if (schemaNode.has("properties") && schemaNode.get("properties").isObject()) {
+            schemaNode.get("properties").fields()
+                    .forEachRemaining(e -> collectField(out, e.getKey(), e.getValue()));
+        }
+    }
+
+    private void collectField(ObjectNode out, String key, JsonNode field) {
+        if (field == null || field.isNull()) return;
+
+        String xComponent = field.hasNonNull("x-component") ? field.get("x-component").asText() : "";
+
+        // Container nodes (Card/Tabs/...) usually carry child properties.
+        if (field.has("properties") && field.get("properties").isObject()) {
+            // Tabs often needs a current value (active pane).
+            if ("Tabs".equals(xComponent)) {
+                if (shouldFill(out.get(key))) {
+                    out.put(key, randomTabsValue(field));
+                }
+            }
+            field.get("properties").fields()
+                    .forEachRemaining(e -> collectField(out, e.getKey(), e.getValue()));
+            return;
+        }
+
+        // Leaf fields: generate value based on enum/type/component.
+        if (!shouldFill(out.get(key))) {
+            return;
+        }
+
+        JsonNode enumNode = field.get("enum");
+        if (enumNode != null && enumNode.isArray() && enumNode.size() > 0) {
+            JsonNode picked = enumNode.get(random.nextInt(enumNode.size()));
+            JsonNode v = picked;
+            if (picked.isObject() && picked.hasNonNull("value")) {
+                v = picked.get("value");
+            }
+            if (v.isBoolean()) out.put(key, v.asBoolean());
+            else if (v.isInt() || v.isLong()) out.put(key, v.asLong());
+            else if (v.isNumber()) out.put(key, v.asDouble());
+            else out.put(key, v.asText());
+            return;
+        }
+
+        String type = field.hasNonNull("type") ? field.get("type").asText() : "";
+        if ("boolean".equals(type) || "Switch".equals(xComponent)) {
+            out.put(key, random.nextBoolean());
+            return;
+        }
+        if ("number".equals(type) || "integer".equals(type) || "NumberPicker".equals(xComponent)) {
+            out.put(key, 1 + random.nextInt(100));
+            return;
+        }
+        if ("DateTimePicker".equals(xComponent)) {
+            // ISO-8601 string is the safest default.
+            long now = System.currentTimeMillis();
+            long delta = (long) random.nextInt(30) * 24 * 60 * 60 * 1000L;
+            out.put(key, new Date(now + delta).toInstant().toString());
+            return;
+        }
+
+        // Default: string-ish value.
+        out.put(key, key + "_" + randomAlphaNum(6));
+    }
+
+    private boolean shouldFill(JsonNode current) {
+        if (current == null || current.isNull()) return true;
+        if (current.isTextual()) return current.asText().trim().isEmpty();
+        return false;
+    }
+
+    private String randomTabsValue(JsonNode field) {
+        JsonNode props = field.hasNonNull("x-component-props") ? field.get("x-component-props") : null;
+        JsonNode panes = props != null ? props.get("panes") : null;
+        if (panes != null && panes.isArray() && panes.size() > 0) {
+            JsonNode picked = panes.get(random.nextInt(panes.size()));
+            if (picked.isObject() && picked.hasNonNull("name")) {
+                return picked.get("name").asText();
+            }
+        }
+        return "";
+    }
+
+    private String randomAlphaNum(int len) {
+        final String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++) {
+            sb.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return sb.toString();
+    }
+
     private void attachInitialValuesFromData(Schema schema) throws IOException {
         if (schema == null || schema.getId() == null || schema.getId().trim().isEmpty()) return;
-        JsonNode data = getSchemaData(schema.getId());
-        if (data == null) return;
         JsonNode value = schema.getValue();
         if (value != null && value.isObject()) {
-            ((ObjectNode) value).set("initial_values", data);
+            JsonNode data = getSchemaData(schema.getId());
+            // Keep response shape stable for the frontend: always provide initial_values.
+            ((ObjectNode) value).set("initial_values", data == null ? objectMapper.createObjectNode() : data);
         }
     }
 
