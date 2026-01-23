@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+	<localRepository>/Users/zhoujianing/T_FILE/repostory/maven</localRepository>
+  <servers>
+    <server>
+      <id>dy-sec-maven</id>
+      <username>cnb</username>
+      <!-- 与触发构建的用户权限一致 -->
+      <password>eFa1eWzfYgIPR7p1054ZgEXj5dB</password>
+    </server>
+  </servers>
+  <mirrors>
+    <mirror>
+        <id>alimaven</id>
+        <name>aliyun maven</name>
+        <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        <mirrorOf>central</mirrorOf> 
+    </mirror>
+  </mirrors>
+  <profiles>
+    <profile>
+      <id>repository</id>
+      <repositories>
+        <repository>
+          <id>tencent-maven</id>
+          <name>TencentCloud Maven</name>
+          <url>https://mirrors.cloud.tencent.com/nexus/repository/maven-public/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+        <repository>
+          <id>spring.milestone</id>
+          <url>https://repo.spring.io/milestone</url>
+        </repository>
+        <repository>
+          <!-- 须与 server 的 id 一致 -->
+          <id>dy-sec-maven</id>
+          <url>https://maven.cnb.cool/dy-sec/maven/-/packages/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+            <id>maven2-plugin</id>
+            <url>https://mirrors.cloud.tencent.com/nexus/repository/maven-public/</url>
+        </pluginRepository>
+      </pluginRepositories>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <activeProfile>repository</activeProfile>
+  </activeProfiles>
+</settings>

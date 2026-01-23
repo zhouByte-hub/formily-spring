@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0f208875-ab27-4e4c-ab8f-c32bfa090b8c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../formily-web/default-nginx.conf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../formily-web/src/components/FormilyCase.vue" beforeDir="false" afterPath="$PROJECT_DIR$/../formily-web/src/components/FormilyCase.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../formily-web/src/services/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/../formily-web/src/services/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../formily-web/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/../formily-web/vite.config.js" afterDir="false" />
-    </list>
+    <list default="true" id="0f208875-ab27-4e4c-ab8f-c32bfa090b8c" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -64,6 +59,11 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="FormilyBasicApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="formily-basic" />
@@ -90,7 +90,7 @@
       <updated>1751262325535</updated>
       <workItem from="1751262326629" duration="41000" />
       <workItem from="1768877767440" duration="14259000" />
-      <workItem from="1768989756878" duration="25714000" />
+      <workItem from="1768989756878" duration="27789000" />
     </task>
     <servers />
   </component>

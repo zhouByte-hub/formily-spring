@@ -1,0 +1,2 @@
+include:
+    - https://cnb.cool/dy-sec/s-devkit/ci-templates/-/blob/develop/.maven-17-ci.yml

@@ -1,0 +1,4 @@
+RELEAS_NAME=formily-web
+CONFIG_FILE=int-config
+# NodePort or ClusterIP
+SERVICE_TYPE=NodePort
